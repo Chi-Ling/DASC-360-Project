@@ -26,6 +26,7 @@ EUcars <- replace(EUcars, EUcars == "DE", "3")
 EUcars <- replace(EUcars, EUcars == "IT", "4")
 EUcars <- replace(EUcars, EUcars == "NL", "5")
 
+EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 
 ```
 
@@ -34,6 +35,10 @@ head(EUcars)
 dim(EUcars)
 ```
 
-This dataset I created is a list of used Fiat vehicles sold within Europe, specifically Central Europe (Italy, Germany, Belgium, Netherlands).
+This data set I created is a list of used Fiat vehicles sold within Europe, specifically Central Europe (Italy, Germany, Belgium, Netherlands).
 Our response dimensions will be price and seats.
 Our predictor variables will be kilometers, engine cylinders, horsepower, year, doors, drivetrain, gearbox, and either model or country it was purchased in. A couple of these variables are categorical, so we'll have to transform them into numberic variables before interacting with them.
+
+```{r}
+
+```
