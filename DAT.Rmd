@@ -5,6 +5,8 @@ date: "2025-02-13"
 ---
 
 ```{r setup, include=FALSE}
+# install.packages("psych")
+library(psych)
 library(tidyverse)
 library(skimr)
 library(dplyr)
@@ -26,12 +28,31 @@ EUcars <- replace(EUcars, EUcars == "DE", "3")
 EUcars <- replace(EUcars, EUcars == "IT", "4")
 EUcars <- replace(EUcars, EUcars == "NL", "5")
 
+EUcars$Gearbox = as.numeric(EUcars$Gearbox)
+EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
+EUcars$Country = as.numeric(EUcars$Country)
 
 ```
 
 ```{r}
 head(EUcars)
 dim(EUcars)
+```
+
+```{r}
+stripchart(EUcars[,2], method = "stack", pch = 16, col = "blue",xlab="Price")
+stripchart(EUcars[,3], method = "stack", pch = 16, col = "blue",xlab="Kilometers")
+stripchart(EUcars[,4], method = "stack", pch = 16, col = "blue",xlab="Power")
+stripchart(EUcars[,5], method = "stack", pch = 16, col = "blue",xlab="Seats")
+stripchart(EUcars[,6], method = "stack", pch = 16, col = "blue",xlab="Doors")
+stripchart(EUcars[,7], method = "stack", pch = 16, col = "blue",xlab="Cylinders")
+stripchart(EUcars[,8], method = "stack", pch = 16, col = "blue",xlab="Gearbox")
+stripchart(EUcars[,9], method = "stack", pch = 16, col = "blue",xlab="Year")
+stripchart(EUcars[,10], method = "stack", pch = 16, col = "blue",xlab="Drivetrain")
+stripchart(EUcars[,11], method = "stack", pch = 16, col = "blue",xlab="Country")
+
+
+describe(EUcars)
 ```
 
 This dataset I created is a list of used Fiat vehicles sold within Europe, specifically Central Europe (Italy, Germany, Belgium, Netherlands).
