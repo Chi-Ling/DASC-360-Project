@@ -27,7 +27,8 @@ EUcars <- replace(EUcars, EUcars == "IT", "4")
 EUcars <- replace(EUcars, EUcars == "NL", "5")
 
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
-
+EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
+EUcars$Country = as.numeric(EUcars$Country)
 ```
 
 ```{r}
