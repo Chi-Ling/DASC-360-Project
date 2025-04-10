@@ -35,3 +35,6 @@ EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
 
 ```
+
+```{r}
+```
