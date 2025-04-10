@@ -34,7 +34,12 @@ EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
 
+EUcars <- as.matrix(EUcars)
 ```
 
 ```{r}
+predictorMatrix <-EUcars[,c(1,3,4,6:11)]
+responseMatrix <-EUcars[,c(2,5)]
+corPredictorMatrix <- cor(predictorMatrix)
+eigen(corPredictorMatrix)$values
 ```
