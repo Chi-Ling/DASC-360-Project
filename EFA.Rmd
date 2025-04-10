@@ -34,23 +34,32 @@ EUcars <- replace(EUcars, EUcars == "NL", "5")
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
-
-EUcars<-as.matrix(EUcars)
-EUcars
 ```
 
 ```{r}
 # Use eigen() to identify intrinsic dimensionality separtely for predictor and response variables.
+predictorMatrix <-EUcars[,c(3,4,6:11)]
+responseMatrix <-EUcars[,c(2,5)]
 
+corPredictorMatrix <- cor(predictorMatrix)
+eigen(corPredictorMatrix)$values
+
+corResponseMatrix <- cor(responseMatrix)
+eigen(corResponseMatrix)$values
 ```
-
-```{r}
 # This criterion is linked to a Learning OutcomeUse pca() to extract the optimally orthogonally and obliquely rotated loading matrices separately for predictor and response variables
 
-```
-
+## Predictor Variables
 ```{r}
-# This criterion is linked to a Learning OutcomeUse pca() to summarize and interpret the variance and covariance retained by the selected rotation
+A <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")$loadings[]
+pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")
 
-
+A3 <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")$loadings[]
+pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")
 ```
+## Response Variables
+```{r}
+A <- pca(r = corResponseMatrix, nfactors = 1)$loadings[]
+pca(r = corResponseMatrix, nfactors = 1)
+```
+After using PCA we came to the conclusion that it does not make any sense to cluster the response varibles together because the data loss of 36%is greater than the threshold of 30%. 
