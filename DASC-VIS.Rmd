@@ -1,0 +1,52 @@
+---
+title: "Found data viz"
+author: "Collin Ryan"
+output: pdf_document
+editor: visual
+execute: 
+  echo: true
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+# install.packages("psych")
+# install.packages("corrplot")
+library(corrplot)
+library(psych)
+library(tidyverse)
+library(skimr)
+library(dplyr)
+```
+
+## R Markdown
+
+```{r}
+EUcars <- read_csv("car_prices.csv", na = c("", NA, "N/A"))
+EUcars = EUcars |> drop_na() |> filter (Brand == "Fiat", Gearbox != "Semi-automatic", Drivetrain != "Rear") |> select(Model,Price,Kilometers,Power, Seats,Doors,Cylinders,Gearbox,Year,Drivetrain,Country)
+
+EUcars <- replace(EUcars, EUcars == "Automatic", "0")
+EUcars <- replace(EUcars, EUcars == "Manual", "1")
+EUcars <- replace(EUcars, EUcars == "4WD", "1")
+EUcars <- replace(EUcars, EUcars == "Front", "0")
+EUcars <- replace(EUcars, EUcars == "AT", "1")
+EUcars <- replace(EUcars, EUcars == "BE", "2")
+EUcars <- replace(EUcars, EUcars == "DE", "3")
+EUcars <- replace(EUcars, EUcars == "IT", "4")
+EUcars <- replace(EUcars, EUcars == "NL", "5")
+
+EUcars$Gearbox = as.numeric(EUcars$Gearbox)
+EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
+EUcars$Country = as.numeric(EUcars$Country)
+
+```
+
+## Visualize and summarize data
+
+This data was found using Kaggle. The full dataset is of used cars sold in the EU, however it is pruned to just show the Fiat cars. The vizuization is of the correlation between the varibles. (correlation matrix and correlation scatter plot)The data has some variables that are highly correlated. Outstanding correlation includes: Kilometers and Price with a strong negatth a strong pive correlation, Price and Power with a strong positive correlation, Price and Year wiositive correlation, Kilometers and Year with a strong negative correlation and Power and Seats with a strong positive correlation. Some variables such as Cylinders and Price as well as Drivetrain and Price have very little correlation.All the other varibles have corelation somewhere in between.
+
+```{r}
+cor_matrix<-cor(EUcars[,2:11])
+cor_matrix
+pairs(cor(EUcars[,2:11]), col = "blue", pch = 16,main="Correlation Scatter Plot")
+corrplot(cor_matrix, title="Correlation Plot")
+```
