@@ -33,7 +33,10 @@ EUcars <- replace(EUcars, EUcars == "NL", "5")
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8b433933a62b4ea6317d380b88d0d2ef2d8515d6
 ```
 
 ```{r}
@@ -41,6 +44,7 @@ head(EUcars)
 dim(EUcars)
 ```
 
+<<<<<<< HEAD
 
 ## Visualize and use describe() to present descriptive statistics for each dimension
 
@@ -79,3 +83,12 @@ corrplot(cor_matrix, title="Correlation Plot")
 
 
 
+=======
+This data set I created is a list of used Fiat vehicles sold within Europe, specifically Central Europe (Italy, Germany, Belgium, Netherlands).
+Our response dimensions will be price and seats.
+Our predictor variables will be kilometers, engine cylinders, horsepower, year, doors, drivetrain, gearbox, and either model or country it was purchased in. A couple of these variables are categorical, so we'll have to transform them into numberic variables before interacting with them.
+
+```{r}
+
+```
+>>>>>>> 8b433933a62b4ea6317d380b88d0d2ef2d8515d6

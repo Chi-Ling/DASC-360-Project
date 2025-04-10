@@ -1,0 +1,40 @@
+---
+title: "European Cars"
+output: html_document
+date: "2025-02-13"
+---
+
+```{r setup, include=FALSE}
+#install.packages("psych")
+#install.packages("corrplot")
+library(corrplot)
+library(psych)
+library(tidyverse)
+library(skimr)
+library(dplyr)
+```
+
+## R Markdown
+
+```{r}
+EUcars <- read_csv("car_prices.csv", na = c("", NA, "N/A"))
+EUcars = EUcars |> drop_na() |> filter (Brand == "Fiat", Gearbox != "Semi-automatic", Drivetrain != "Rear") |> select(Model,Price,Kilometers,Power, Seats,Doors,Cylinders,Gearbox,Year,Drivetrain,Country)
+
+EUcars <- replace(EUcars, EUcars == "Automatic", "0")
+EUcars <- replace(EUcars, EUcars == "Manual", "1")
+EUcars <- replace(EUcars, EUcars == "4WD", "1")
+EUcars <- replace(EUcars, EUcars == "Front", "0")
+EUcars <- replace(EUcars, EUcars == "AT", "1")
+EUcars <- replace(EUcars, EUcars == "BE", "2")
+EUcars <- replace(EUcars, EUcars == "DE", "3")
+EUcars <- replace(EUcars, EUcars == "IT", "4")
+EUcars <- replace(EUcars, EUcars == "NL", "5")
+
+EUcars$Gearbox = as.numeric(EUcars$Gearbox)
+EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
+EUcars$Country = as.numeric(EUcars$Country)
+
+```
+
+```{r}
+```
