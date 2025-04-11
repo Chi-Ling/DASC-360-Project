@@ -85,3 +85,22 @@ A <- pca(r = corResponseMatrix, nfactors = 1)$loadings[]
 pca(r = corResponseMatrix, nfactors = 1)
 ```
 After using PCA we came to the conclusion that it does not make any sense to cluster the response varibles together because the data loss of 36%is greater than the threshold of 30%. 
+
+
+```
+#Use pca() to summarize and interpret the variance and covariance retained by the selected rotation
+```
+```{r}
+A <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")
+
+pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")
+# We decided to use orthogonal rotation for our factors, as oblique does not remove a significant amount of complexity nor does it contain a higher cumulative variance. Additionally, when viewing the phi-factor correlation matrix in our obliquely rotated factors, the correlation between any two factors doesn't exceed even .15, much less .3.
+
+A
+# Factors 1-4 have variances of .24, .2, .19, and .14 respectively, adding up to a .76 cumulative variance, which means that 76% of the variance in the original model was retained. We'll consider this sufficient, as it falls below the 30% data loss threshold. Additionally, each variable has a communality of >.70, which means there isn't one specific variable that has lost much of its variance.
+
+# 2 variables have a Hofmann's complexity of 2 or higher: Power and Cylinders. We will keep these in our model, but we'll make sure to keep an eye on them.
+
+
+# Since we decided not to group response variables into a singular factor, there is no rotation to interpret variance and covariance for.
+```
