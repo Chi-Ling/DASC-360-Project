@@ -384,498 +384,130 @@ EUcars &lt;- replace(EUcars, EUcars == &quot;NL&quot;, &quot;5&quot;)
 
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
-EUcars$Country = as.numeric(EUcars$Country)
+EUcars$Country = as.numeric(EUcars$Country)</code></pre>
+<pre class="r"><code># Use eigen() to identify intrinsic dimensionality separtely for predictor and response variables.
+predictorMatrix &lt;-EUcars[,c(3,4,6:11)]
+responseMatrix &lt;-EUcars[,c(2,5)]
 
-EUcars&lt;-as.matrix(EUcars)
-EUcars</code></pre>
-<pre><code>##        Model          Price   Kilometers Power Seats Doors Cylinders Gearbox
-##   [1,] &quot;Freemont&quot;     &quot; 5100&quot; &quot;225282&quot;   &quot;170&quot; &quot;7&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##   [2,] &quot;Panda&quot;        &quot; 1995&quot; &quot;162076&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [3,] &quot;Grande Punto&quot; &quot; 1450&quot; &quot;238642&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [4,] &quot;500X&quot;         &quot; 8900&quot; &quot;199000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [5,] &quot;Panda&quot;        &quot; 4500&quot; &quot;121967&quot;   &quot; 86&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##   [6,] &quot;Tipo&quot;         &quot; 8500&quot; &quot; 70000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [7,] &quot;Grande Punto&quot; &quot; 2950&quot; &quot; 98550&quot;   &quot; 77&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [8,] &quot;Tipo&quot;         &quot; 9790&quot; &quot; 48558&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##   [9,] &quot;500X&quot;         &quot; 8900&quot; &quot;199000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [10,] &quot;Punto Evo&quot;    &quot; 4950&quot; &quot;145638&quot;   &quot; 86&quot; &quot;5&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [11,] &quot;Panda&quot;        &quot; 9500&quot; &quot; 27500&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [12,] &quot;500X&quot;         &quot;13900&quot; &quot; 77053&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [13,] &quot;500&quot;          &quot; 4490&quot; &quot;128635&quot;   &quot; 86&quot; &quot;4&quot;   &quot;3&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [14,] &quot;Tipo&quot;         &quot;13490&quot; &quot; 60000&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [15,] &quot;500&quot;          &quot; 9200&quot; &quot; 96000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [16,] &quot;500&quot;          &quot; 9900&quot; &quot; 66893&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [17,] &quot;Panda&quot;        &quot;10500&quot; &quot; 47555&quot;   &quot; 86&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [18,] &quot;Punto&quot;        &quot; 5900&quot; &quot; 54773&quot;   &quot; 69&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [19,] &quot;Freemont&quot;     &quot;13990&quot; &quot;140305&quot;   &quot;170&quot; &quot;7&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [20,] &quot;Panda&quot;        &quot; 3245&quot; &quot;112583&quot;   &quot; 60&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [21,] &quot;Bravo&quot;        &quot; 7490&quot; &quot;118967&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [22,] &quot;500&quot;          &quot; 6600&quot; &quot;122000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [23,] &quot;500&quot;          &quot; 9990&quot; &quot; 35400&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [24,] &quot;500C&quot;         &quot; 5990&quot; &quot;154286&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [25,] &quot;500X&quot;         &quot;12500&quot; &quot;122000&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [26,] &quot;Punto Evo&quot;    &quot; 2950&quot; &quot;195000&quot;   &quot; 75&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [27,] &quot;Panda&quot;        &quot;10550&quot; &quot;     1&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [28,] &quot;Panda&quot;        &quot; 2500&quot; &quot; 71473&quot;   &quot; 39&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [29,] &quot;500&quot;          &quot; 7950&quot; &quot; 89000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [30,] &quot;Tipo&quot;         &quot;11999&quot; &quot; 31731&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [31,] &quot;Tipo&quot;         &quot;16900&quot; &quot; 36469&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [32,] &quot;500&quot;          &quot; 3950&quot; &quot;199009&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [33,] &quot;Tipo&quot;         &quot;10500&quot; &quot; 98500&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [34,] &quot;500&quot;          &quot; 7450&quot; &quot; 41233&quot;   &quot; 86&quot; &quot;4&quot;   &quot;2&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [35,] &quot;Qubo&quot;         &quot; 6890&quot; &quot; 73500&quot;   &quot; 73&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [36,] &quot;Panda&quot;        &quot; 3445&quot; &quot;102011&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [37,] &quot;500X&quot;         &quot;10700&quot; &quot; 97797&quot;   &quot;110&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [38,] &quot;500&quot;          &quot;11450&quot; &quot; 16164&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [39,] &quot;500L&quot;         &quot; 9900&quot; &quot;111625&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [40,] &quot;Tipo&quot;         &quot; 9500&quot; &quot;134588&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [41,] &quot;500X&quot;         &quot;12499&quot; &quot;115626&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [42,] &quot;600&quot;          &quot;23950&quot; &quot;   100&quot;   &quot;101&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;0&quot;    
-##  [43,] &quot;Doblo&quot;        &quot; 6100&quot; &quot;208910&quot;   &quot;105&quot; &quot;2&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [44,] &quot;500&quot;          &quot; 6455&quot; &quot; 99000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [45,] &quot;500&quot;          &quot; 8445&quot; &quot;113208&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [46,] &quot;500&quot;          &quot; 8450&quot; &quot; 81850&quot;   &quot; 80&quot; &quot;4&quot;   &quot;3&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [47,] &quot;Punto Evo&quot;    &quot; 4100&quot; &quot;160000&quot;   &quot; 90&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [48,] &quot;Panda&quot;        &quot; 6500&quot; &quot;115000&quot;   &quot; 84&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [49,] &quot;500&quot;          &quot; 7745&quot; &quot; 73781&quot;   &quot; 86&quot; &quot;4&quot;   &quot;3&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [50,] &quot;Panda&quot;        &quot; 6945&quot; &quot; 50706&quot;   &quot; 86&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [51,] &quot;500X&quot;         &quot;11500&quot; &quot;112000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [52,] &quot;Panda&quot;        &quot; 5800&quot; &quot;177000&quot;   &quot; 84&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-##  [53,] &quot;Tipo&quot;         &quot;11500&quot; &quot; 33000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [54,] &quot;500L&quot;         &quot; 9900&quot; &quot; 90561&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [55,] &quot;Tipo&quot;         &quot; 8500&quot; &quot; 70000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [56,] &quot;Freemont&quot;     &quot;10890&quot; &quot; 99999&quot;   &quot;170&quot; &quot;7&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [57,] &quot;Panda&quot;        &quot; 9950&quot; &quot;     1&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [58,] &quot;500&quot;          &quot; 4999&quot; &quot;141200&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;0&quot;       &quot;1&quot;    
-##  [59,] &quot;Talento&quot;      &quot; 9000&quot; &quot;243200&quot;   &quot;125&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [60,] &quot;Panda&quot;        &quot; 9890&quot; &quot; 35185&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [61,] &quot;Panda&quot;        &quot; 9900&quot; &quot; 39900&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [62,] &quot;Panda&quot;        &quot;10990&quot; &quot; 39900&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [63,] &quot;Panda&quot;        &quot;12950&quot; &quot;  7700&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [64,] &quot;500L&quot;         &quot; 9900&quot; &quot;102000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [65,] &quot;500X&quot;         &quot;16450&quot; &quot; 24108&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [66,] &quot;Ducato&quot;       &quot;14890&quot; &quot;     1&quot;   &quot;177&quot; &quot;3&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [67,] &quot;Panda&quot;        &quot;12950&quot; &quot;  9547&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [68,] &quot;Grande Punto&quot; &quot; 2899&quot; &quot;113280&quot;   &quot; 75&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [69,] &quot;500&quot;          &quot; 5945&quot; &quot;101852&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [70,] &quot;Panda&quot;        &quot;10500&quot; &quot; 26183&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [71,] &quot;500&quot;          &quot; 7000&quot; &quot;134000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [72,] &quot;Panda&quot;        &quot;10900&quot; &quot;118000&quot;   &quot; 95&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [73,] &quot;Tipo&quot;         &quot;16850&quot; &quot; 57817&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [74,] &quot;500&quot;          &quot; 9990&quot; &quot; 26300&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [75,] &quot;Panda&quot;        &quot; 5450&quot; &quot;157000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [76,] &quot;Panda&quot;        &quot;11000&quot; &quot;     1&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [77,] &quot;Panda&quot;        &quot;11900&quot; &quot; 15000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [78,] &quot;Tipo&quot;         &quot;12900&quot; &quot; 44809&quot;   &quot;101&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [79,] &quot;Tipo&quot;         &quot; 6900&quot; &quot;172000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [80,] &quot;Doblo&quot;        &quot;20900&quot; &quot;    10&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [81,] &quot;500&quot;          &quot;13790&quot; &quot; 16626&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [82,] &quot;500X&quot;         &quot;13450&quot; &quot; 51380&quot;   &quot;120&quot; &quot;5&quot;   &quot;4&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [83,] &quot;500&quot;          &quot;11900&quot; &quot; 25000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [84,] &quot;Panda&quot;        &quot; 9200&quot; &quot; 50000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [85,] &quot;500&quot;          &quot;13925&quot; &quot; 10154&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;0&quot;    
-##  [86,] &quot;500C&quot;         &quot; 8790&quot; &quot; 73000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [87,] &quot;500&quot;          &quot;10800&quot; &quot; 59999&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [88,] &quot;500L&quot;         &quot;15400&quot; &quot; 43700&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [89,] &quot;Panda&quot;        &quot;12900&quot; &quot;     1&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [90,] &quot;Tipo&quot;         &quot; 6900&quot; &quot;170100&quot;   &quot;120&quot; &quot;2&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [91,] &quot;Punto&quot;        &quot; 5900&quot; &quot;129900&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [92,] &quot;500&quot;          &quot;10900&quot; &quot; 39000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [93,] &quot;Tipo&quot;         &quot; 9900&quot; &quot; 42000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [94,] &quot;500&quot;          &quot; 5900&quot; &quot;152000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [95,] &quot;Tipo&quot;         &quot;15250&quot; &quot; 14800&quot;   &quot;101&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [96,] &quot;Tipo&quot;         &quot; 9790&quot; &quot; 48558&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [97,] &quot;Panda&quot;        &quot; 6390&quot; &quot; 97000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-##  [98,] &quot;500&quot;          &quot;11900&quot; &quot; 30634&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-##  [99,] &quot;Punto Evo&quot;    &quot; 4950&quot; &quot;149955&quot;   &quot;105&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [100,] &quot;500X&quot;         &quot;11490&quot; &quot; 47064&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [101,] &quot;Doblo&quot;        &quot;12690&quot; &quot; 69969&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [102,] &quot;Panda&quot;        &quot;11950&quot; &quot; 31000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [103,] &quot;Doblo&quot;        &quot;18900&quot; &quot; 66000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [104,] &quot;Talento&quot;      &quot;17480&quot; &quot;122716&quot;   &quot;145&quot; &quot;2&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [105,] &quot;Tipo&quot;         &quot;10200&quot; &quot;  8000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [106,] &quot;500&quot;          &quot; 9490&quot; &quot; 81409&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-## [107,] &quot;500X&quot;         &quot;13600&quot; &quot; 75972&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [108,] &quot;500L&quot;         &quot;11900&quot; &quot; 69143&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [109,] &quot;500&quot;          &quot; 5800&quot; &quot;171000&quot;   &quot; 95&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [110,] &quot;500C&quot;         &quot;10500&quot; &quot; 76000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-## [111,] &quot;Panda&quot;        &quot;10900&quot; &quot; 46958&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [112,] &quot;Panda&quot;        &quot; 6900&quot; &quot;126000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [113,] &quot;600&quot;          &quot;24200&quot; &quot;     1&quot;   &quot;136&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;0&quot;    
-## [114,] &quot;Tipo&quot;         &quot;11700&quot; &quot; 80000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [115,] &quot;500&quot;          &quot; 5950&quot; &quot;124636&quot;   &quot; 86&quot; &quot;4&quot;   &quot;3&quot;   &quot;2&quot;       &quot;1&quot;    
-## [116,] &quot;Panda&quot;        &quot; 9950&quot; &quot; 22972&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [117,] &quot;500X&quot;         &quot;16990&quot; &quot; 45980&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [118,] &quot;Multipla&quot;     &quot; 3000&quot; &quot;279357&quot;   &quot;116&quot; &quot;6&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [119,] &quot;500X&quot;         &quot;14890&quot; &quot; 49000&quot;   &quot;151&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [120,] &quot;Fiorino&quot;      &quot; 4500&quot; &quot;132333&quot;   &quot; 75&quot; &quot;2&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [121,] &quot;500&quot;          &quot; 7990&quot; &quot; 86169&quot;   &quot; 80&quot; &quot;4&quot;   &quot;3&quot;   &quot;2&quot;       &quot;1&quot;    
-## [122,] &quot;Talento&quot;      &quot;19900&quot; &quot;159000&quot;   &quot;125&quot; &quot;8&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [123,] &quot;500&quot;          &quot; 9900&quot; &quot; 80000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [124,] &quot;Tipo&quot;         &quot;11000&quot; &quot; 53800&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [125,] &quot;500&quot;          &quot; 3999&quot; &quot;179000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [126,] &quot;500X&quot;         &quot;17490&quot; &quot; 15000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [127,] &quot;Panda&quot;        &quot;13800&quot; &quot; 16500&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [128,] &quot;Qubo&quot;         &quot; 8950&quot; &quot; 22301&quot;   &quot; 73&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [129,] &quot;Qubo&quot;         &quot; 9980&quot; &quot; 59598&quot;   &quot; 77&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [130,] &quot;500&quot;          &quot;10750&quot; &quot; 35042&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [131,] &quot;Panda&quot;        &quot;10900&quot; &quot; 45841&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [132,] &quot;Panda&quot;        &quot; 8590&quot; &quot; 63473&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [133,] &quot;Panda&quot;        &quot; 5900&quot; &quot;110000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [134,] &quot;500&quot;          &quot; 7980&quot; &quot;123000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-## [135,] &quot;Seicento&quot;     &quot; 2500&quot; &quot; 67000&quot;   &quot; 54&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [136,] &quot;500X&quot;         &quot;14489&quot; &quot; 48808&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [137,] &quot;500X&quot;         &quot;17900&quot; &quot; 64195&quot;   &quot;150&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [138,] &quot;Punto Evo&quot;    &quot; 3990&quot; &quot;165000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [139,] &quot;Seicento&quot;     &quot;  695&quot; &quot;156002&quot;   &quot; 54&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [140,] &quot;500&quot;          &quot; 7900&quot; &quot; 94400&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [141,] &quot;Panda&quot;        &quot;10400&quot; &quot; 21625&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [142,] &quot;500L&quot;         &quot;13400&quot; &quot; 40000&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [143,] &quot;Panda&quot;        &quot; 3750&quot; &quot;174000&quot;   &quot; 54&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [144,] &quot;Tipo&quot;         &quot;11985&quot; &quot;110200&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [145,] &quot;Panda&quot;        &quot; 9500&quot; &quot; 27500&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [146,] &quot;Panda&quot;        &quot; 3400&quot; &quot;150000&quot;   &quot; 60&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [147,] &quot;Ducato&quot;       &quot;31950&quot; &quot; 34850&quot;   &quot;140&quot; &quot;9&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [148,] &quot;500L&quot;         &quot;12990&quot; &quot;120000&quot;   &quot;120&quot; &quot;7&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [149,] &quot;Panda&quot;        &quot; 3900&quot; &quot;217000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [150,] &quot;500&quot;          &quot; 5500&quot; &quot; 99000&quot;   &quot;101&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [151,] &quot;Tipo&quot;         &quot;11900&quot; &quot; 69886&quot;   &quot;110&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [152,] &quot;500C&quot;         &quot;14300&quot; &quot; 32960&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-## [153,] &quot;Panda&quot;        &quot; 6900&quot; &quot;155559&quot;   &quot; 60&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [154,] &quot;500L&quot;         &quot;12480&quot; &quot; 57300&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [155,] &quot;Tipo&quot;         &quot; 8950&quot; &quot;113500&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [156,] &quot;Panda&quot;        &quot; 7500&quot; &quot; 70546&quot;   &quot; 86&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-## [157,] &quot;Panda&quot;        &quot; 9400&quot; &quot; 19931&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [158,] &quot;Panda&quot;        &quot;12400&quot; &quot;  8291&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [159,] &quot;Freemont&quot;     &quot; 9990&quot; &quot;140900&quot;   &quot;170&quot; &quot;7&quot;   &quot;4&quot;   &quot;4&quot;       &quot;0&quot;    
-## [160,] &quot;Tipo&quot;         &quot;10500&quot; &quot;103000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [161,] &quot;500X&quot;         &quot;13900&quot; &quot; 77053&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [162,] &quot;500e&quot;         &quot;22450&quot; &quot; 12239&quot;   &quot; 58&quot; &quot;4&quot;   &quot;2&quot;   &quot;0&quot;       &quot;0&quot;    
-## [163,] &quot;500&quot;          &quot;12890&quot; &quot; 34612&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [164,] &quot;Talento&quot;      &quot;19000&quot; &quot;111500&quot;   &quot;125&quot; &quot;6&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [165,] &quot;500X&quot;         &quot;14300&quot; &quot; 60396&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [166,] &quot;Panda&quot;        &quot;10900&quot; &quot; 58276&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [167,] &quot;Talento&quot;      &quot;13000&quot; &quot;159114&quot;   &quot;120&quot; &quot;3&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [168,] &quot;Freemont&quot;     &quot; 8000&quot; &quot;211000&quot;   &quot;170&quot; &quot;7&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [169,] &quot;Tipo&quot;         &quot;15450&quot; &quot;  5487&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [170,] &quot;500C&quot;         &quot;11000&quot; &quot; 55150&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-## [171,] &quot;Panda&quot;        &quot;10900&quot; &quot; 76000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [172,] &quot;500L&quot;         &quot;11500&quot; &quot; 71000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [173,] &quot;Tipo&quot;         &quot;14700&quot; &quot; 76098&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [174,] &quot;Tipo&quot;         &quot;13490&quot; &quot; 60000&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [175,] &quot;Tipo&quot;         &quot;13990&quot; &quot; 50700&quot;   &quot;101&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [176,] &quot;Tipo&quot;         &quot;10900&quot; &quot;129235&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [177,] &quot;Punto&quot;        &quot; 4490&quot; &quot;199000&quot;   &quot; 75&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [178,] &quot;Panda&quot;        &quot;15990&quot; &quot;  3000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [179,] &quot;500X&quot;         &quot;14490&quot; &quot; 57000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [180,] &quot;500X&quot;         &quot;14700&quot; &quot; 73740&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [181,] &quot;500X&quot;         &quot;15950&quot; &quot; 65900&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [182,] &quot;500L&quot;         &quot;13400&quot; &quot; 32776&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [183,] &quot;500L&quot;         &quot; 6100&quot; &quot;205050&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [184,] &quot;Panda&quot;        &quot;11950&quot; &quot;   120&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [185,] &quot;500X&quot;         &quot;11990&quot; &quot; 67700&quot;   &quot;110&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [186,] &quot;Bravo&quot;        &quot; 1995&quot; &quot;199035&quot;   &quot; 90&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [187,] &quot;Doblo&quot;        &quot;10890&quot; &quot; 91250&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [188,] &quot;500C&quot;         &quot;10990&quot; &quot; 46350&quot;   &quot; 69&quot; &quot;4&quot;   &quot;2&quot;   &quot;4&quot;       &quot;1&quot;    
-## [189,] &quot;500&quot;          &quot; 9200&quot; &quot; 96000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [190,] &quot;Tipo&quot;         &quot;15900&quot; &quot; 57000&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [191,] &quot;Panda&quot;        &quot;12490&quot; &quot; 42586&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [192,] &quot;Panda&quot;        &quot;13770&quot; &quot;    15&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [193,] &quot;500&quot;          &quot;12990&quot; &quot; 16474&quot;   &quot; 71&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [194,] &quot;Tipo&quot;         &quot;10450&quot; &quot; 99990&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [195,] &quot;Panda&quot;        &quot; 4490&quot; &quot; 30990&quot;   &quot; 54&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [196,] &quot;500X&quot;         &quot;16990&quot; &quot; 34000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [197,] &quot;500&quot;          &quot;13950&quot; &quot; 11358&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [198,] &quot;500&quot;          &quot; 9900&quot; &quot; 66893&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-## [199,] &quot;Grande Punto&quot; &quot; 5990&quot; &quot; 90500&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [200,] &quot;500X&quot;         &quot;18970&quot; &quot; 66000&quot;   &quot;150&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [201,] &quot;500X&quot;         &quot;21500&quot; &quot;  6000&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [202,] &quot;Punto&quot;        &quot; 8500&quot; &quot; 62000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [203,] &quot;500L&quot;         &quot; 5800&quot; &quot;178000&quot;   &quot; 84&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [204,] &quot;500&quot;          &quot; 9900&quot; &quot; 86608&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [205,] &quot;Punto&quot;        &quot; 7200&quot; &quot;121000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [206,] &quot;500L&quot;         &quot;14490&quot; &quot; 50737&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [207,] &quot;Fiorino&quot;      &quot; 9900&quot; &quot; 55300&quot;   &quot; 77&quot; &quot;2&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [208,] &quot;Tipo&quot;         &quot;14200&quot; &quot; 60000&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [209,] &quot;500X&quot;         &quot;12500&quot; &quot; 93549&quot;   &quot;110&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [210,] &quot;500X&quot;         &quot;21500&quot; &quot;    10&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [211,] &quot;Panda&quot;        &quot; 8999&quot; &quot; 62000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [212,] &quot;Panda&quot;        &quot; 2300&quot; &quot;230000&quot;   &quot; 54&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [213,] &quot;500X&quot;         &quot;16100&quot; &quot; 61000&quot;   &quot;129&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [214,] &quot;Seicento&quot;     &quot; 4200&quot; &quot; 80000&quot;   &quot; 54&quot; &quot;5&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [215,] &quot;500&quot;          &quot; 8700&quot; &quot; 80290&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [216,] &quot;500L&quot;         &quot; 6500&quot; &quot;174000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [217,] &quot;Bravo&quot;        &quot; 3500&quot; &quot;165575&quot;   &quot; 90&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [218,] &quot;500&quot;          &quot; 9990&quot; &quot; 34300&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [219,] &quot;Fiorino&quot;      &quot; 6500&quot; &quot;154000&quot;   &quot; 75&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [220,] &quot;500&quot;          &quot;12500&quot; &quot; 20634&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [221,] &quot;Tipo&quot;         &quot;13500&quot; &quot; 60529&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [222,] &quot;500X&quot;         &quot;20000&quot; &quot; 32500&quot;   &quot;129&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [223,] &quot;500&quot;          &quot;12900&quot; &quot; 25044&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;3&quot;       &quot;1&quot;    
-## [224,] &quot;Panda&quot;        &quot; 6899&quot; &quot;130000&quot;   &quot; 80&quot; &quot;4&quot;   &quot;5&quot;   &quot;2&quot;       &quot;1&quot;    
-## [225,] &quot;Doblo&quot;        &quot;29890&quot; &quot;    10&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [226,] &quot;500X&quot;         &quot;18400&quot; &quot; 20000&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [227,] &quot;500X&quot;         &quot;16500&quot; &quot; 30000&quot;   &quot;150&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [228,] &quot;500X&quot;         &quot;14990&quot; &quot; 80970&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [229,] &quot;Tipo&quot;         &quot;13900&quot; &quot; 30969&quot;   &quot; 95&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [230,] &quot;Tipo&quot;         &quot;17830&quot; &quot; 44900&quot;   &quot;131&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [231,] &quot;Tipo&quot;         &quot; 8900&quot; &quot; 96245&quot;   &quot; 95&quot; &quot;5&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [232,] &quot;New Panda&quot;    &quot;10900&quot; &quot; 26000&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [233,] &quot;500&quot;          &quot; 8750&quot; &quot;114000&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [234,] &quot;Panda&quot;        &quot; 3500&quot; &quot;109000&quot;   &quot; 60&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [235,] &quot;Talento&quot;      &quot;14500&quot; &quot;106500&quot;   &quot;120&quot; &quot;3&quot;   &quot;4&quot;   &quot;4&quot;       &quot;1&quot;    
-## [236,] &quot;500X&quot;         &quot;15980&quot; &quot; 45500&quot;   &quot;140&quot; &quot;5&quot;   &quot;5&quot;   &quot;4&quot;       &quot;0&quot;    
-## [237,] &quot;500&quot;          &quot; 6700&quot; &quot;115000&quot;   &quot; 95&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;1&quot;    
-## [238,] &quot;500&quot;          &quot;10600&quot; &quot; 50600&quot;   &quot; 69&quot; &quot;4&quot;   &quot;3&quot;   &quot;4&quot;       &quot;0&quot;    
-## [239,] &quot;Panda&quot;        &quot; 9800&quot; &quot; 41739&quot;   &quot; 69&quot; &quot;4&quot;   &quot;5&quot;   &quot;4&quot;       &quot;1&quot;    
-## [240,] &quot;500X&quot;         &quot;14390&quot; &quot; 50500&quot;   &quot;120&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [241,] &quot;Panda&quot;        &quot;11900&quot; &quot; 23500&quot;   &quot; 69&quot; &quot;5&quot;   &quot;5&quot;   &quot;3&quot;       &quot;1&quot;    
-## [242,] &quot;500e&quot;         &quot;13450&quot; &quot; 53978&quot;   &quot; 58&quot; &quot;4&quot;   &quot;3&quot;   &quot;0&quot;       &quot;0&quot;    
-##        Year   Drivetrain Country
-##   [1,] &quot;2013&quot; &quot;1&quot;        &quot;4&quot;    
-##   [2,] &quot;2010&quot; &quot;0&quot;        &quot;5&quot;    
-##   [3,] &quot;2006&quot; &quot;0&quot;        &quot;5&quot;    
-##   [4,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##   [5,] &quot;2012&quot; &quot;0&quot;        &quot;5&quot;    
-##   [6,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##   [7,] &quot;2008&quot; &quot;0&quot;        &quot;5&quot;    
-##   [8,] &quot;2018&quot; &quot;0&quot;        &quot;2&quot;    
-##   [9,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##  [10,] &quot;2012&quot; &quot;0&quot;        &quot;5&quot;    
-##  [11,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [12,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-##  [13,] &quot;2011&quot; &quot;0&quot;        &quot;5&quot;    
-##  [14,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-##  [15,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-##  [16,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##  [17,] &quot;2015&quot; &quot;1&quot;        &quot;4&quot;    
-##  [18,] &quot;2012&quot; &quot;0&quot;        &quot;4&quot;    
-##  [19,] &quot;2012&quot; &quot;1&quot;        &quot;3&quot;    
-##  [20,] &quot;2007&quot; &quot;0&quot;        &quot;5&quot;    
-##  [21,] &quot;2012&quot; &quot;0&quot;        &quot;5&quot;    
-##  [22,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-##  [23,] &quot;2016&quot; &quot;0&quot;        &quot;3&quot;    
-##  [24,] &quot;2013&quot; &quot;0&quot;        &quot;2&quot;    
-##  [25,] &quot;2017&quot; &quot;1&quot;        &quot;4&quot;    
-##  [26,] &quot;2011&quot; &quot;0&quot;        &quot;4&quot;    
-##  [27,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-##  [28,] &quot;1999&quot; &quot;0&quot;        &quot;4&quot;    
-##  [29,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-##  [30,] &quot;2019&quot; &quot;0&quot;        &quot;2&quot;    
-##  [31,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-##  [32,] &quot;2011&quot; &quot;0&quot;        &quot;5&quot;    
-##  [33,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##  [34,] &quot;2011&quot; &quot;0&quot;        &quot;5&quot;    
-##  [35,] &quot;2013&quot; &quot;0&quot;        &quot;3&quot;    
-##  [36,] &quot;2011&quot; &quot;0&quot;        &quot;5&quot;    
-##  [37,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [38,] &quot;2021&quot; &quot;0&quot;        &quot;3&quot;    
-##  [39,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [40,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [41,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-##  [42,] &quot;2024&quot; &quot;0&quot;        &quot;3&quot;    
-##  [43,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-##  [44,] &quot;2012&quot; &quot;0&quot;        &quot;3&quot;    
-##  [45,] &quot;2017&quot; &quot;0&quot;        &quot;5&quot;    
-##  [46,] &quot;2018&quot; &quot;0&quot;        &quot;5&quot;    
-##  [47,] &quot;2009&quot; &quot;0&quot;        &quot;4&quot;    
-##  [48,] &quot;2013&quot; &quot;0&quot;        &quot;4&quot;    
-##  [49,] &quot;2013&quot; &quot;0&quot;        &quot;5&quot;    
-##  [50,] &quot;2017&quot; &quot;0&quot;        &quot;5&quot;    
-##  [51,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-##  [52,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-##  [53,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [54,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-##  [55,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##  [56,] &quot;2014&quot; &quot;1&quot;        &quot;4&quot;    
-##  [57,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-##  [58,] &quot;2011&quot; &quot;0&quot;        &quot;3&quot;    
-##  [59,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-##  [60,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [61,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [62,] &quot;2023&quot; &quot;0&quot;        &quot;3&quot;    
-##  [63,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [64,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-##  [65,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [66,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [67,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-##  [68,] &quot;2007&quot; &quot;0&quot;        &quot;5&quot;    
-##  [69,] &quot;2013&quot; &quot;0&quot;        &quot;5&quot;    
-##  [70,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [71,] &quot;2013&quot; &quot;0&quot;        &quot;4&quot;    
-##  [72,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [73,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [74,] &quot;2021&quot; &quot;0&quot;        &quot;3&quot;    
-##  [75,] &quot;2013&quot; &quot;0&quot;        &quot;4&quot;    
-##  [76,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [77,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [78,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [79,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-##  [80,] &quot;2025&quot; &quot;0&quot;        &quot;4&quot;    
-##  [81,] &quot;2020&quot; &quot;0&quot;        &quot;2&quot;    
-##  [82,] &quot;2023&quot; &quot;0&quot;        &quot;3&quot;    
-##  [83,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [84,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-##  [85,] &quot;2017&quot; &quot;0&quot;        &quot;3&quot;    
-##  [86,] &quot;2017&quot; &quot;0&quot;        &quot;3&quot;    
-##  [87,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-##  [88,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [89,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-##  [90,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-##  [91,] &quot;2012&quot; &quot;0&quot;        &quot;4&quot;    
-##  [92,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-##  [93,] &quot;2019&quot; &quot;0&quot;        &quot;3&quot;    
-##  [94,] &quot;2008&quot; &quot;0&quot;        &quot;4&quot;    
-##  [95,] &quot;2022&quot; &quot;0&quot;        &quot;3&quot;    
-##  [96,] &quot;2018&quot; &quot;0&quot;        &quot;2&quot;    
-##  [97,] &quot;2016&quot; &quot;0&quot;        &quot;3&quot;    
-##  [98,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-##  [99,] &quot;2010&quot; &quot;0&quot;        &quot;4&quot;    
-## [100,] &quot;2017&quot; &quot;0&quot;        &quot;2&quot;    
-## [101,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [102,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [103,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [104,] &quot;2020&quot; &quot;0&quot;        &quot;3&quot;    
-## [105,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [106,] &quot;2017&quot; &quot;0&quot;        &quot;2&quot;    
-## [107,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [108,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [109,] &quot;2014&quot; &quot;0&quot;        &quot;4&quot;    
-## [110,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [111,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [112,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [113,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-## [114,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [115,] &quot;2012&quot; &quot;0&quot;        &quot;5&quot;    
-## [116,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [117,] &quot;2018&quot; &quot;1&quot;        &quot;3&quot;    
-## [118,] &quot;2004&quot; &quot;0&quot;        &quot;4&quot;    
-## [119,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [120,] &quot;2014&quot; &quot;0&quot;        &quot;3&quot;    
-## [121,] &quot;2015&quot; &quot;0&quot;        &quot;5&quot;    
-## [122,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [123,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [124,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [125,] &quot;2008&quot; &quot;0&quot;        &quot;4&quot;    
-## [126,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [127,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-## [128,] &quot;2014&quot; &quot;0&quot;        &quot;5&quot;    
-## [129,] &quot;2019&quot; &quot;0&quot;        &quot;3&quot;    
-## [130,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [131,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [132,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [133,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [134,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [135,] &quot;2005&quot; &quot;0&quot;        &quot;4&quot;    
-## [136,] &quot;2023&quot; &quot;0&quot;        &quot;3&quot;    
-## [137,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [138,] &quot;2009&quot; &quot;0&quot;        &quot;4&quot;    
-## [139,] &quot;2000&quot; &quot;0&quot;        &quot;5&quot;    
-## [140,] &quot;2014&quot; &quot;0&quot;        &quot;4&quot;    
-## [141,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [142,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [143,] &quot;1997&quot; &quot;0&quot;        &quot;4&quot;    
-## [144,] &quot;2020&quot; &quot;0&quot;        &quot;3&quot;    
-## [145,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [146,] &quot;2007&quot; &quot;0&quot;        &quot;4&quot;    
-## [147,] &quot;2022&quot; &quot;0&quot;        &quot;3&quot;    
-## [148,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [149,] &quot;2012&quot; &quot;0&quot;        &quot;4&quot;    
-## [150,] &quot;2009&quot; &quot;0&quot;        &quot;4&quot;    
-## [151,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [152,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [153,] &quot;2008&quot; &quot;1&quot;        &quot;4&quot;    
-## [154,] &quot;2017&quot; &quot;0&quot;        &quot;3&quot;    
-## [155,] &quot;2017&quot; &quot;0&quot;        &quot;3&quot;    
-## [156,] &quot;2013&quot; &quot;0&quot;        &quot;4&quot;    
-## [157,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [158,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [159,] &quot;2012&quot; &quot;1&quot;        &quot;3&quot;    
-## [160,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [161,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [162,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-## [163,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [164,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [165,] &quot;2015&quot; &quot;1&quot;        &quot;4&quot;    
-## [166,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [167,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [168,] &quot;2012&quot; &quot;1&quot;        &quot;4&quot;    
-## [169,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [170,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [171,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [172,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [173,] &quot;2020&quot; &quot;0&quot;        &quot;5&quot;    
-## [174,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [175,] &quot;2021&quot; &quot;0&quot;        &quot;1&quot;    
-## [176,] &quot;2020&quot; &quot;0&quot;        &quot;5&quot;    
-## [177,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [178,] &quot;2025&quot; &quot;0&quot;        &quot;3&quot;    
-## [179,] &quot;2019&quot; &quot;0&quot;        &quot;2&quot;    
-## [180,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [181,] &quot;2020&quot; &quot;0&quot;        &quot;3&quot;    
-## [182,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [183,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [184,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-## [185,] &quot;2017&quot; &quot;0&quot;        &quot;2&quot;    
-## [186,] &quot;2009&quot; &quot;0&quot;        &quot;5&quot;    
-## [187,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [188,] &quot;2019&quot; &quot;0&quot;        &quot;3&quot;    
-## [189,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [190,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [191,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [192,] &quot;2024&quot; &quot;0&quot;        &quot;3&quot;    
-## [193,] &quot;2023&quot; &quot;0&quot;        &quot;3&quot;    
-## [194,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [195,] &quot;2002&quot; &quot;0&quot;        &quot;4&quot;    
-## [196,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [197,] &quot;2024&quot; &quot;0&quot;        &quot;4&quot;    
-## [198,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [199,] &quot;2011&quot; &quot;0&quot;        &quot;3&quot;    
-## [200,] &quot;2020&quot; &quot;0&quot;        &quot;3&quot;    
-## [201,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [202,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [203,] &quot;2014&quot; &quot;0&quot;        &quot;4&quot;    
-## [204,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [205,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [206,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [207,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [208,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [209,] &quot;2019&quot; &quot;0&quot;        &quot;4&quot;    
-## [210,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [211,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [212,] &quot;2006&quot; &quot;0&quot;        &quot;4&quot;    
-## [213,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [214,] &quot;2001&quot; &quot;0&quot;        &quot;4&quot;    
-## [215,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [216,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [217,] &quot;2008&quot; &quot;0&quot;        &quot;4&quot;    
-## [218,] &quot;2022&quot; &quot;0&quot;        &quot;3&quot;    
-## [219,] &quot;2014&quot; &quot;0&quot;        &quot;4&quot;    
-## [220,] &quot;2018&quot; &quot;0&quot;        &quot;4&quot;    
-## [221,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [222,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [223,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [224,] &quot;2016&quot; &quot;0&quot;        &quot;4&quot;    
-## [225,] &quot;2024&quot; &quot;0&quot;        &quot;3&quot;    
-## [226,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [227,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [228,] &quot;2020&quot; &quot;0&quot;        &quot;3&quot;    
-## [229,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [230,] &quot;2021&quot; &quot;0&quot;        &quot;3&quot;    
-## [231,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [232,] &quot;2022&quot; &quot;0&quot;        &quot;4&quot;    
-## [233,] &quot;2017&quot; &quot;0&quot;        &quot;4&quot;    
-## [234,] &quot;2005&quot; &quot;0&quot;        &quot;4&quot;    
-## [235,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;    
-## [236,] &quot;2018&quot; &quot;0&quot;        &quot;3&quot;    
-## [237,] &quot;2015&quot; &quot;0&quot;        &quot;4&quot;    
-## [238,] &quot;2014&quot; &quot;0&quot;        &quot;4&quot;    
-## [239,] &quot;2020&quot; &quot;0&quot;        &quot;4&quot;    
-## [240,] &quot;2023&quot; &quot;0&quot;        &quot;3&quot;    
-## [241,] &quot;2023&quot; &quot;0&quot;        &quot;4&quot;    
-## [242,] &quot;2021&quot; &quot;0&quot;        &quot;4&quot;</code></pre>
-<pre class="r"><code># Use eigen() to identify intrinsic dimensionality separtely for predictor and response variables.</code></pre>
-<pre class="r"><code># This criterion is linked to a Learning OutcomeUse pca() to extract the optimally orthogonally and obliquely rotated loading matrices separately for predictor and response variables</code></pre>
+corPredictorMatrix &lt;- cor(predictorMatrix)
+eigen(corPredictorMatrix)$values</code></pre>
+<pre><code>## [1] 1.9861004 1.9139542 1.1833861 1.0267828 0.6598816 0.5009474 0.4662218
+## [8] 0.2627257</code></pre>
+<pre class="r"><code>corResponseMatrix &lt;- cor(responseMatrix)
+eigen(corResponseMatrix)$values</code></pre>
+<pre><code>## [1] 1.281917 0.718083</code></pre>
+</div>
+<div id="this-criterion-is-linked-to-a-learning-outcomeuse-pca-to-extract-the-optimally-orthogonally-and-obliquely-rotated-loading-matrices-separately-for-predictor-and-response-variables" class="section level1">
+<h1>This criterion is linked to a Learning OutcomeUse pca() to extract
+the optimally orthogonally and obliquely rotated loading matrices
+separately for predictor and response variables</h1>
+<div id="predictor-variables" class="section level2">
+<h2>Predictor Variables</h2>
+<pre class="r"><code>A &lt;- pca(r = corPredictorMatrix, nfactors = 4, rotate = &quot;varimax&quot;)$loadings[]
+pca(r = corPredictorMatrix, nfactors = 4, rotate = &quot;varimax&quot;)</code></pre>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = r, nfactors = nfactors, residuals = residuals, 
+##     rotate = rotate, n.obs = n.obs, covar = covar, scores = scores, 
+##     missing = missing, impute = impute, oblique.scores = oblique.scores, 
+##     method = method, use = use, cor = cor, correct = 0.5, weight = NULL)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##              RC2   RC1  RC3   RC4   h2   u2 com
+## Kilometers  0.86  0.03 0.08  0.06 0.76 0.24 1.0
+## Power      -0.02  0.47 0.69 -0.21 0.74 0.26 2.0
+## Doors      -0.08 -0.04 0.89  0.06 0.80 0.20 1.0
+## Cylinders   0.48 -0.06 0.30 -0.68 0.78 0.22 2.3
+## Gearbox     0.10 -0.83 0.03  0.12 0.71 0.29 1.1
+## Year       -0.86 -0.06 0.29 -0.05 0.84 0.16 1.2
+## Drivetrain  0.19  0.80 0.15  0.06 0.71 0.29 1.2
+## Country     0.36 -0.14 0.11  0.78 0.77 0.23 1.5
+## 
+##                        RC2  RC1  RC3  RC4
+## SS loadings           1.90 1.58 1.49 1.14
+## Proportion Var        0.24 0.20 0.19 0.14
+## Cumulative Var        0.24 0.44 0.62 0.76
+## Proportion Explained  0.31 0.26 0.24 0.19
+## Cumulative Proportion 0.31 0.57 0.81 1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 4 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.1 
+## 
+## Fit based upon off diagonal values = 0.83</code></pre>
+<pre class="r"><code>A3 &lt;- pca(r = corPredictorMatrix, nfactors = 4, rotate = &quot;oblimin&quot;)$loadings[]</code></pre>
+<pre><code>## Loading required namespace: GPArotation</code></pre>
+<pre class="r"><code>pca(r = corPredictorMatrix, nfactors = 4, rotate = &quot;oblimin&quot;)</code></pre>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = r, nfactors = nfactors, residuals = residuals, 
+##     rotate = rotate, n.obs = n.obs, covar = covar, scores = scores, 
+##     missing = missing, impute = impute, oblique.scores = oblique.scores, 
+##     method = method, use = use, cor = cor, correct = 0.5, weight = NULL)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##              TC2   TC1  TC3   TC4   h2   u2 com
+## Kilometers  0.86  0.02 0.09  0.04 0.76 0.24 1.0
+## Power      -0.03  0.44 0.64 -0.18 0.74 0.26 1.9
+## Doors      -0.11 -0.07 0.90  0.07 0.80 0.20 1.1
+## Cylinders   0.47 -0.11 0.25 -0.70 0.78 0.22 2.1
+## Gearbox     0.09 -0.83 0.09  0.07 0.71 0.29 1.1
+## Year       -0.87 -0.06 0.29 -0.02 0.84 0.16 1.2
+## Drivetrain  0.19  0.81 0.11  0.11 0.71 0.29 1.2
+## Country     0.36 -0.11 0.19  0.77 0.77 0.23 1.6
+## 
+##                        TC2  TC1  TC3  TC4
+## SS loadings           1.91 1.59 1.46 1.15
+## Proportion Var        0.24 0.20 0.18 0.14
+## Cumulative Var        0.24 0.44 0.62 0.76
+## Proportion Explained  0.31 0.26 0.24 0.19
+## Cumulative Proportion 0.31 0.57 0.81 1.00
+## 
+##  With component correlations of 
+##      TC2   TC1   TC3   TC4
+## TC2 1.00  0.00  0.03  0.03
+## TC1 0.00  1.00  0.11 -0.12
+## TC3 0.03  0.11  1.00 -0.11
+## TC4 0.03 -0.12 -0.11  1.00
+## 
+## Mean item complexity =  1.4
+## Test of the hypothesis that 4 components are sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.1 
+## 
+## Fit based upon off diagonal values = 0.83</code></pre>
+<p>We decided to use orthogonal rotation rather than oblique rotation
+because with both we found that there was only 1 complex variable
+remaining. Oblique rotation did not help fix this. On top of that
+oblique factor correlation matrix was not above the threshold of 0.3
+meaning that it is not strictly necessary to use.</p>
+</div>
+<div id="response-variables" class="section level2">
+<h2>Response Variables</h2>
+<pre class="r"><code>A &lt;- pca(r = corResponseMatrix, nfactors = 1)$loadings[]
+pca(r = corResponseMatrix, nfactors = 1)</code></pre>
+<pre><code>## Principal Components Analysis
+## Call: principal(r = r, nfactors = nfactors, residuals = residuals, 
+##     rotate = rotate, n.obs = n.obs, covar = covar, scores = scores, 
+##     missing = missing, impute = impute, oblique.scores = oblique.scores, 
+##     method = method, use = use, cor = cor, correct = 0.5, weight = NULL)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##       PC1   h2   u2 com
+## Price 0.8 0.64 0.36   1
+## Seats 0.8 0.64 0.36   1
+## 
+##                 PC1
+## SS loadings    1.28
+## Proportion Var 0.64
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 component is sufficient.
+## 
+## The root mean square of the residuals (RMSR) is  0.36 
+## 
+## Fit based upon off diagonal values = -0.62</code></pre>
+<p>After using PCA we came to the conclusion that it does not make any
+sense to cluster the response variables together because the data loss
+of 36% is greater than the threshold of 30%. You can not rotate 1 factor
+so we did not do the orthogonal and oblique rotation tests.</p>
+</div>
 </div>
 
 

@@ -57,9 +57,17 @@ pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")
 A3 <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")$loadings[]
 pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")
 ```
+We decided to use orthogonal rotation rather than oblique rotation because with both we found that there was only 1 complex variable remaining. Oblique rotation did not help fix this. On top of that oblique factor correlation matrix was not above the threshold of 0.3 meaning that it is not strictly necessary to use. 
+
 ## Response Variables
 ```{r}
 A <- pca(r = corResponseMatrix, nfactors = 1)$loadings[]
 pca(r = corResponseMatrix, nfactors = 1)
 ```
-After using PCA we came to the conclusion that it does not make any sense to cluster the response varibles together because the data loss of 36%is greater than the threshold of 30%. 
+After using PCA we came to the conclusion that it does not make any sense to cluster the response variables together because the data loss of 36% is greater than the threshold of 30%. You can not rotate 1 factor so we did not do the orthogonal and oblique rotation tests. 
+
+
+
+
+
+
