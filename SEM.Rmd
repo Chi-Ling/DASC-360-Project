@@ -65,3 +65,11 @@ parameterestimates(MOD)[1:15,]
 indices <- fitmeasures(MOD)
 indices
 ```
+Identify and discuss significant predictors of response variables
+
+the most significant predictor for price is CarUsage with a test statistic of 13.379 compared to VehicleType and Doors which had a test statistic of 6.753 and 1.464 respectivly. 
+The most significatn predictor for Seats was VehicleType which had a test statistic of 5.731 which was barely better than Doors which had a value of 5.606 and CarUsage had the least impact with 1.033
+
+Summarize and interpret model fit
+
+
