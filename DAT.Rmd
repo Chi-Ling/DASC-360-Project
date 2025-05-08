@@ -5,10 +5,6 @@ date: "2025-02-13"
 ---
 
 ```{r setup, include=FALSE}
-# install.packages("psych")
-# install.packages("corrplot")
-library(corrplot)
-library(psych)
 library(tidyverse)
 library(skimr)
 library(dplyr)
@@ -33,10 +29,6 @@ EUcars <- replace(EUcars, EUcars == "NL", "5")
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
-<<<<<<< HEAD
-
-=======
->>>>>>> 8b433933a62b4ea6317d380b88d0d2ef2d8515d6
 ```
 
 ```{r}
@@ -44,46 +36,6 @@ head(EUcars)
 dim(EUcars)
 ```
 
-<<<<<<< HEAD
-
-## Visualize and use describe() to present descriptive statistics for each dimension
-
-The data as no clear issues, however there are a few important things to note. The year is skewed left, meaning that most of the data is from cars made after 2016.  Cylinders and gearbox are both greatly skewed left, meanwhile drivetrain is greatly skewed right. All other variables are lightly skewed either right or left. At first glance there are 2 cars with clearly higher price and all of the other cars. Similarity, kilometers has one potential outlier with a car having more kilometers than any other car.
-```{r}
-stripchart(EUcars[,2], method = "stack", pch = 16, col = "blue",xlab="Price")
-stripchart(EUcars[,3], method = "stack", pch = 16, col = "blue",xlab="Kilometers")
-stripchart(EUcars[,4], method = "stack", pch = 16, col = "blue",xlab="Power")
-stripchart(EUcars[,5], method = "stack", pch = 16, col = "blue",xlab="Seats")
-stripchart(EUcars[,6], method = "stack", pch = 16, col = "blue",xlab="Doors")
-stripchart(EUcars[,7], method = "stack", pch = 16, col = "blue",xlab="Cylinders")
-stripchart(EUcars[,8], method = "stack", pch = 16, col = "blue",xlab="Gearbox")
-stripchart(EUcars[,9], method = "stack", pch = 16, col = "blue",xlab="Year")
-stripchart(EUcars[,10], method = "stack", pch = 16, col = "blue",xlab="Drivetrain")
-stripchart(EUcars[,11], method = "stack", pch = 16, col = "blue",xlab="Country")
-
-
-describe(EUcars)
-```
-
-## Visualize and summarize the covariability between each pair of dimensions
-
-Our data has some variables that are highly correlated. Outstanding correlation includes: Kilometers and Price with a strong negative correlation, Price and Power with a strong positive correlation, Price and Year with a strong positive correlation, Kilometers and Year with a strong negative correlation and Power and Seats with a strong positive correlation. Some variables such as Cylinders and Price as well as Drivetrain and Price have very little correlation.All the other varibles have corelation somewhere in between.  
-
-```{r}
-cov_matrix<-cov(EUcars[,2:11])
-cov_matrix
-pairs(cov(EUcars[,2:11]), col = "blue", pch = 16,main="Covariability Scatter Plot")
-
-cor_matrix<-cor(EUcars[,2:11])
-cor_matrix
-pairs(cor(EUcars[,2:11]), col = "blue", pch = 16,main="Correlation Scatter Plot")
-corrplot(cor_matrix, title="Correlation Plot")
-```
-
-
-
-
-=======
 This data set I created is a list of used Fiat vehicles sold within Europe, specifically Central Europe (Italy, Germany, Belgium, Netherlands).
 Our response dimensions will be price and seats.
 Our predictor variables will be kilometers, engine cylinders, horsepower, year, doors, drivetrain, gearbox, and either model or country it was purchased in. A couple of these variables are categorical, so we'll have to transform them into numberic variables before interacting with them.
@@ -91,4 +43,3 @@ Our predictor variables will be kilometers, engine cylinders, horsepower, year, 
 ```{r}
 
 ```
->>>>>>> 8b433933a62b4ea6317d380b88d0d2ef2d8515d6
