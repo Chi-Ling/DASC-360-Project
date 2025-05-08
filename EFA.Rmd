@@ -34,10 +34,6 @@ EUcars <- replace(EUcars, EUcars == "NL", "5")
 EUcars$Gearbox = as.numeric(EUcars$Gearbox)
 EUcars$Drivetrain = as.numeric(EUcars$Drivetrain)
 EUcars$Country = as.numeric(EUcars$Country)
-
-```
-
-```{r}
 ```
 
 ```{r}
@@ -46,25 +42,7 @@ predictorMatrix <-EUcars[,c(3,4,6:11)]
 responseMatrix <-EUcars[,c(2,5)]
 
 corPredictorMatrix <- cor(predictorMatrix)
-corResponseMatrix <- cor(responseMatrix)
-```
-
-## Eigen values
-```{r}
-#Predictor values
 eigen(corPredictorMatrix)$values
-plot(eigen(corPredictorMatrix)$values)
-
-# For our predictor values using Jolliefs and Kaisers criterion we would get a intrinsic dimensional of 4 while using the inflection point would be 2. Based on this we would use a intrinsic dimensionality of 4.
-
-#Response values
-eigen(corResponseMatrix)$values
-plot(eigen(corResponseMatrix)$values)
-
-# For our Response variable Kaisers criterion would tell us to use 1 while Jolliefs tells us to use 2 and in this case the inflection point isn't helpful with our graph so based on this we are going to use a intrinsic dimensionality of 1 because that is the only way we can reduce our dimensions for Response.
-```
-
-
 
 corResponseMatrix <- cor(responseMatrix)
 eigen(corResponseMatrix)$values
@@ -79,28 +57,17 @@ pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")
 A3 <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")$loadings[]
 pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")
 ```
+We decided to use orthogonal rotation rather than oblique rotation because with both we found that there was only 1 complex variable remaining. Oblique rotation did not help fix this. On top of that oblique factor correlation matrix was not above the threshold of 0.3 meaning that it is not strictly necessary to use. 
+
 ## Response Variables
 ```{r}
 A <- pca(r = corResponseMatrix, nfactors = 1)$loadings[]
 pca(r = corResponseMatrix, nfactors = 1)
 ```
-After using PCA we came to the conclusion that it does not make any sense to cluster the response varibles together because the data loss of 36%is greater than the threshold of 30%. 
+After using PCA we came to the conclusion that it does not make any sense to cluster the response variables together because the data loss of 36% is greater than the threshold of 30%. You can not rotate 1 factor so we did not do the orthogonal and oblique rotation tests. 
 
 
-```
-#Use pca() to summarize and interpret the variance and covariance retained by the selected rotation
-```
-```{r}
-A <- pca(r = corPredictorMatrix, nfactors = 4, rotate = "varimax")
-
-pca(r = corPredictorMatrix, nfactors = 4, rotate = "oblimin")
-# We decided to use orthogonal rotation for our factors, as oblique does not remove a significant amount of complexity nor does it contain a higher cumulative variance. Additionally, when viewing the phi-factor correlation matrix in our obliquely rotated factors, the correlation between any two factors doesn't exceed even .15, much less .3.
-
-A
-# Factors 1-4 have variances of .24, .2, .19, and .14 respectively, adding up to a .76 cumulative variance, which means that 76% of the variance in the original model was retained. We'll consider this sufficient, as it falls below the 30% data loss threshold. Additionally, each variable has a communality of >.70, which means there isn't one specific variable that has lost much of its variance.
-
-# 2 variables have a Hofmann's complexity of 2 or higher: Power and Cylinders. We will keep these in our model, but we'll make sure to keep an eye on them.
 
 
-# Since we decided not to group response variables into a singular factor, there is no rotation to interpret variance and covariance for.
-```
+
+

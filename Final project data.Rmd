@@ -1,0 +1,20 @@
+---
+title: "Final project data"
+author: "Collin Ryan"
+format: html
+editor: visual
+embed-resources: true
+---
+  
+```{r}
+#| include: false
+library(tidyverse)
+library(skimr)
+```
+
+```{r}
+#| message: false
+charge <- read_csv("C:\\Users\\Colli\\Downloads\\charge-stp-2024-wide.csv")
+skim(charge)
+```
+The data looks mostly clean, but there are a few issues. Many variables have missing values (like identity, auth_method, and peak_power). Some start_* time variables are character and should probably be numeric or combined into a timestamp. The rate and amount columns are wide and will need pivot_longer() to make the data tidy for analysis. Lastly, some variable names (like rate99) are unclear and need checking. 
